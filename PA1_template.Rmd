@@ -1,4 +1,4 @@
-knit2html(
+
 ---
 title: "Course Project 1"
 author: "Guillaume Polet"
@@ -36,7 +36,7 @@ summary(data)
 ```
 
 ## What is mean total number of steps taken per day?
-```{r,warning=FALSE,echo=TRUE,message=FALSE}
+```{r mean,warning=FALSE,echo=TRUE,message=FALSE}
 if(require(ggplot2)==FALSE)(install.packages("ggplot2")); library(ggplot2)
 if(require(dplyr)==FALSE)(install.packages("dplyr")); library(dplyr)
 data2<-data%>%
@@ -57,7 +57,7 @@ median(data2$activity_step, na.rm=TRUE)
 ```
 
 ## What is the average daily activity pattern?
-```{r,warning=FALSE,echo=TRUE}
+```{r averagedaily,warning=FALSE,echo=TRUE}
 data3<-data%>%
   group_by(interval)%>%
   summarise(steps=mean(steps,na.rm=TRUE))
@@ -70,7 +70,7 @@ ggplot(data=data3, aes(x=interval, y=steps)) +
 
 On average across all the days in the dataset, the 5-minute interval contains
 the maximum number of steps?
-```{r,warning=FALSE,echo=TRUE}
+```{r maxavg,warning=FALSE,echo=TRUE}
 data3[which.max(data3$steps), ]$interval
 ```
 
@@ -86,10 +86,10 @@ sum(is.na(data$steps))
 
 ```
 
-All of the missing values are filled in with mean value for that 5-minute
+All of the missing values should be imputed with mean value for that 5-minute
 interval.
 
-```{r,warning=FALSE,echo=TRUE}
+```{r imputation,warning=FALSE,echo=TRUE}
 # Creating a function to imput missing values with mean for that 5 minute interval
 valueImputation <- function(steps, interval) {
   filled <- NA
@@ -105,7 +105,7 @@ imputedData$steps <- mapply(valueImputation, imputedData$steps, imputedData$inte
 ```
 Now, using the filled data set, let's make a histogram of the total number of steps taken each day and calculate the mean and median total number of steps.
 
-```{r,warning=FALSE,echo=TRUE}
+```{r imputeddata,warning=FALSE,echo=TRUE}
 data5<-imputedData%>%
   group_by(date)%>%
   summarise(activity_step=sum(as.numeric(steps),na.rm=TRUE))
@@ -148,7 +148,7 @@ imputedData$day <- sapply(imputedData$date, FUN=dayOrWeeekend)
 ```
 
 Make a panel plot containing a time series plot (i.e. type = “l”) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
-```{r,warning=FALSE,echo=TRUE,message=FALSE}
+```{r avgweekdayvsweekend,warning=FALSE,echo=TRUE,message=FALSE}
 data6<-imputedData%>%
   group_by(interval,day)%>%
   summarise(steps=mean(as.numeric(steps),na.rm=TRUE))
@@ -160,4 +160,4 @@ xlab("5-minute interval") +
   ylab("Number of steps")+
   theme(legend.position="none")
 ```
-)
+
