@@ -1,3 +1,4 @@
+knit2html(
 ---
 title: "Course Project 1"
 author: "Guillaume Polet"
@@ -24,7 +25,7 @@ NA)
 
 ## Loading the Data and performong some preprocessing
 ```{r loaddata,warning=FALSE,echo=TRUE}
-  
+unzip(zipfile="activity.zip")  
 data <- read.csv("activity.csv")
 data$date <- as.POSIXct(data$date, "%Y-%m-%d")
 weekday <- weekdays(data$date)
@@ -159,3 +160,4 @@ xlab("5-minute interval") +
   ylab("Number of steps")+
   theme(legend.position="none")
 ```
+)
